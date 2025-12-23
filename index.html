@@ -6,6 +6,98 @@
   <title>Grand Luxury Tree</title>
 
   <style>
+    /* ===== Letter UI ===== */
+#letter-btn{
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  z-index: 60;
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  border: 1px solid rgba(212,175,55,.6);
+  background: rgba(0,0,0,.55);
+  color: #d4af37;
+  font-size: 22px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 22px rgba(212,175,55,.12);
+  backdrop-filter: blur(6px);
+  transition: transform .15s ease, background .25s ease, box-shadow .25s ease;
+}
+#letter-btn:hover{
+  background: rgba(212,175,55,.15);
+  box-shadow: 0 0 28px rgba(212,175,55,.22);
+}
+#letter-btn:active{ transform: scale(.96); }
+
+#letter-modal{
+  position: absolute;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(6px);
+  pointer-events: auto;
+}
+.letter-hidden{
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease;
+}
+.letter-show{
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity .2s ease;
+}
+
+.letter-card{
+  width: min(560px, 92vw);
+  max-height: min(72vh, 680px);
+  overflow: auto;
+  position: relative;
+  border-radius: 14px;
+  border: 1px solid rgba(212,175,55,.45);
+  background:
+    linear-gradient(180deg, rgba(20,20,20,.92), rgba(0,0,0,.88));
+  box-shadow: 0 0 40px rgba(0,0,0,.65);
+  padding: 18px 18px 16px;
+  color: rgba(255,255,255,.88);
+}
+
+.letter-card h2{
+  margin: 4px 0 10px;
+  font-family: 'Cinzel','Times New Roman',serif;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #fceea7;
+}
+
+.letter-content{
+  line-height: 1.65;
+  font-size: 14px;
+  color: rgba(255,255,255,.84);
+}
+.letter-content p{ margin: 10px 0; }
+
+.letter-close{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(212,175,55,.35);
+  background: rgba(0,0,0,.35);
+  color: rgba(212,175,55,.95);
+  cursor: pointer;
+}
+.letter-close:hover{ background: rgba(212,175,55,.12); }
+
     body { margin: 0; overflow: hidden; background: #000; font-family: 'Times New Roman', serif; }
     #canvas-container { width: 100vw; height: 100vh; position: absolute; inset: 0; z-index: 1; }
 
@@ -787,8 +879,54 @@ function updateSnow(dt){
       updateSnow(dt);
       composer.render();
     }
+// ===== Letter toggle =====
+const letterBtn = document.getElementById('letter-btn');
+const letterModal = document.getElementById('letter-modal');
+const letterClose = document.getElementById('letter-close');
+
+function openLetter(){
+  letterModal.classList.remove('letter-hidden');
+  letterModal.classList.add('letter-show');
+}
+
+function closeLetter(){
+  letterModal.classList.remove('letter-show');
+  letterModal.classList.add('letter-hidden');
+}
+
+letterBtn.addEventListener('click', openLetter);
+letterClose.addEventListener('click', closeLetter);
+
+// click outside card to close
+letterModal.addEventListener('click', (e) => {
+  if (e.target === letterModal) closeLetter();
+});
+
+// ESC to close
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeLetter();
+});
 
     init();
   </script>
+  <!-- Letter button + modal -->
+<button id="letter-btn" aria-label="Open letter" title="Open letter">✉️</button>
+
+<div id="letter-modal" class="letter-hidden" role="dialog" aria-modal="true" aria-labelledby="letter-title">
+  <div class="letter-card">
+    <button id="letter-close" class="letter-close" aria-label="Close letter">✕</button>
+    <h2 id="letter-title">💌 A Letter</h2>
+
+    <div class="letter-content">
+      <p>Chào bạn,</p>
+      <p>
+        Đây là lá thư của bạn. Bạn có thể sửa nội dung tùy ý: lời chúc, kỷ niệm,
+        hoặc một lời nhắn bí mật.
+      </p>
+      <p>— From Quân 🎄</p>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
