@@ -12,6 +12,7 @@
   right: 22px;
   bottom: 22px;
   z-index: 60;
+  pointer-events: auto;
   width: 54px;
   height: 54px;
   border-radius: 999px;
@@ -33,7 +34,7 @@
 #letter-btn:active{ transform: scale(.96); }
 
 #letter-modal{
-  position: absolute;
+  position: fixed; /* nên dùng fixed */
   inset: 0;
   z-index: 80;
   display: flex;
@@ -42,18 +43,24 @@
   padding: 18px;
   background: rgba(0,0,0,.55);
   backdrop-filter: blur(6px);
-  pointer-events: auto;
-}
-.letter-hidden{
-  opacity: 0;
-  pointer-events: none;
+
+  opacity: 0;              /* mặc định ẩn */
+  pointer-events: none;    /* mặc định không chặn click */
   transition: opacity .2s ease;
 }
-.letter-show{
+
+/* khi show */
+#letter-modal.letter-show{
   opacity: 1;
   pointer-events: auto;
-  transition: opacity .2s ease;
 }
+
+/* khi hidden */
+#letter-modal.letter-hidden{
+  opacity: 0;
+  pointer-events: none;
+}
+
 
 .letter-card{
   width: min(560px, 92vw);
@@ -219,7 +226,32 @@
     <video id="webcam" autoplay playsinline></video>
     <div id="debug-info">Initializing...</div>
   </div>
+<!-- Letter button + modal -->
+<button id="letter-btn" aria-label="Open letter" title="Open letter">✉️</button>
 
+<div id="letter-modal" class="letter-hidden" role="dialog" aria-modal="true" aria-labelledby="letter-title">
+  <div class="letter-card">
+    <button id="letter-close" class="letter-close" aria-label="Close letter">✕</button>
+    <h2 id="letter-title">💌 I will always be here I will always be here... Waiting for you
+
+    <div class="letter-content">
+      <p>Hii Anh Thuw Baka!
+      <p>
+        Chúc em noel vui vẻ, thi điểm caoo thành thạo tiếng hàn, Mong cho em sức khỏe khôn hơn tí
+        nhớ mấy cái anh bày cho khônn, mà chắc không nhớ chii em ngất lắm
+        Anh không chúc em hạnh phúc với ngkhac mô tại anh ich kỉ hh,
+        em khong thành công được với ngkhac moo chỉ vui 1 tgian ròi khổ thoii-.- lo học đi
+        đừng yêu đương vớ vẩn nựa khổ người ra, khuyên em nỏ nghe em bướng
+        Anh khong cần em quay về cung đươc nma em phải biết giữ mình cái chi nên cái chi không nên
+        em ngấtt anh không chịu đc nghe bực lắm!em khong muốn quay về thì khong 
+        khong là anh khong cho em đi mo..
+        (Khi mo em thay cảm giác à rang rang đó : mệt hay buồn hay nhớ thì ve day
+        anh đợi em maixii)
+        có thể là mỗi tuần sẽ update cho 1 lá thư hehe!
+        website ni sẽ tồn tại mãi mãi..(21/04/2023)!
+      </p>
+      <p>— From Trương Hữu Anh Quân 🎄</p>
+    </div>
   <script type="module">
     import * as THREE from 'three';
     import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
@@ -909,22 +941,6 @@ window.addEventListener('keydown', (e) => {
 
     init();
   </script>
-  <!-- Letter button + modal -->
-<button id="letter-btn" aria-label="Open letter" title="Open letter">✉️</button>
-
-<div id="letter-modal" class="letter-hidden" role="dialog" aria-modal="true" aria-labelledby="letter-title">
-  <div class="letter-card">
-    <button id="letter-close" class="letter-close" aria-label="Close letter">✕</button>
-    <h2 id="letter-title">💌 A Letter</h2>
-
-    <div class="letter-content">
-      <p>Chào bạn,</p>
-      <p>
-        Đây là lá thư của bạn. Bạn có thể sửa nội dung tùy ý: lời chúc, kỷ niệm,
-        hoặc một lời nhắn bí mật.
-      </p>
-      <p>— From Quân 🎄</p>
-    </div>
   </div>
 </div>
 
