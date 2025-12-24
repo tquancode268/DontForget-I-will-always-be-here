@@ -6,6 +6,31 @@
   <title>Grand Luxury Tree</title>
 
   <style>
+#music-btn{
+  position: absolute;
+  right: 22px;
+  bottom: 86px; /* nằm trên nút thư một chút */
+  z-index: 60;
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  border: 1px solid rgba(212,175,55,.6);
+  background: rgba(0,0,0,.55);
+  color: #d4af37;
+  font-size: 22px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 22px rgba(212,175,55,.12);
+  backdrop-filter: blur(6px);
+  transition: transform .15s ease, background .25s ease, box-shadow .25s ease;
+}
+#music-btn:hover{
+  background: rgba(212,175,55,.15);
+  box-shadow: 0 0 28px rgba(212,175,55,.22);
+}
+#music-btn:active{ transform: scale(.96); }
+
     /* ===== Letter UI ===== */
 #letter-btn{
   position: absolute;
@@ -255,6 +280,10 @@
       </p>
       <p>— From Trương Hữu Anh Quân 🎄</p>
     </div>
+    <!-- ===== Background music ===== -->
+<audio id="bgm" src="./AUDIO/bgm.mp3" loop preload="auto"></audio>
+<button id="music-btn" title="Bật / Tắt nhạc" aria-label="Toggle music">🔊</button>
+
   <script type="module">
     import * as THREE from 'three';
     import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
@@ -308,6 +337,37 @@
     let snowPoints, snowGeo, snowMat;
     let snowSpeeds, snowDriftX, snowDriftZ;
     const debugInfo = document.getElementById('debug-info');
+    
+    // ===== Music toggle =====
+const bgm = document.getElementById('bgm');
+const musicBtn = document.getElementById('music-btn');
+
+if (bgm && musicBtn) {
+  let isPlaying = false;
+
+  const updateIcon = () => {
+    musicBtn.textContent = isPlaying ? '🔊' : '🔇';
+    musicBtn.title = isPlaying ? 'Tắt nhạc' : 'Bật nhạc';
+  };
+
+  musicBtn.addEventListener('click', async () => {
+    try {
+      if (!isPlaying) {
+        bgm.volume = 0.6;   // chỉnh âm lượng (0.0 -> 1.0)
+        await bgm.play();   // phải click mới play được (rule của browser)
+        isPlaying = true;
+      } else {
+        bgm.pause();
+        isPlaying = false;
+      }
+      updateIcon();
+    } catch (e) {
+      console.log('Play blocked:', e);
+    }
+  });
+
+  updateIcon();
+}
 
     // ========= INIT =========
     async function init(){
@@ -946,6 +1006,9 @@ window.addEventListener('keydown', (e) => {
   </script>
   </div>
 </div>
+<!-- ===== Background music ===== -->
+<audio id="bgm" src="./AUDIO/bgm.mp3" loop preload="auto"></audio>
+<button id="music-btn" title="Bật / Tắt nhạc" aria-label="Toggle music">🔇</button>
 
 </body>
 </html>
